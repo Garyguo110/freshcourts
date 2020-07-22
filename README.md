@@ -1,6 +1,7 @@
 # FreshCourts
-https://freshcourts.herokuapp.com/. 
+https://freshcourts.herokuapp.com/.  
 This service will support Tennis Court reservations.
+Pushing to master branch will automatically deploy to Heroku.
 
 ## Yarn
 Yarn is a package manager
