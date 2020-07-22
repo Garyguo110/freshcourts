@@ -1,5 +1,6 @@
-#Server Code
-This directory will store all backend server code and logic
+#FreshCourts
+https://freshcourts.herokuapp.com/
+This service will support Tennis Court reservations.
 
 ##Yarn
 Yarn is a package manager
