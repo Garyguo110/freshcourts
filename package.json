@@ -5,9 +5,11 @@
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "selenium-webdriver": "^4.0.0-alpha.7"
   }
 }
