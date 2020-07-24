@@ -6,7 +6,7 @@ const path = require('path');
 app.use(express.static(path.join(__dirname, '..', 'client/build')));
 
 app.get('/api', async (req, res) => {
-    const webdriver = require('selenium-webdriver');
+    const {Builder, By, until} = require('selenium-webdriver');
     require('chromedriver');
     const chrome = require('selenium-webdriver/chrome');
 
@@ -19,14 +19,15 @@ app.get('/api', async (req, res) => {
     options.addArguments("--disable-gpu");
     options.addArguments("--no-sandbox");
 
-    let driver = new webdriver.Builder()
+    let driver = new Builder()
         .forBrowser('chrome')
         .setChromeOptions(options)
         .setChromeService(serviceBuilder)
         .build();
 
-    await driver.get('http://www.google.com');
-    res.send(await driver.getTitle());
+    await driver.get('https://spotery.com/search?psLangId=EN&psAddrCity=San%20Francisco&psSourceFlow=SPOT&psIsGridView=false');
+    let table = await driver.wait(until.elementLocated(By.id('pt1:pgl17')),5000);
+    res.send(await table.getAttribute('outerHTML'));
 });
 
 app.get('*', (req, res) => {
