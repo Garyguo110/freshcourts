@@ -9,6 +9,7 @@
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
+    "chromedriver": "^84.0.1",
     "express": "^4.17.1",
     "selenium-webdriver": "^4.0.0-alpha.7"
   }
