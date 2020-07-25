@@ -14,8 +14,7 @@ brew services start postgresql
 psql postgres
 
 // Now you can run commands e.g. test_table commands
-create table test_table (id integer, name text);
-insert into test_table values (1, 'hello database');
+...
 
 // Stop the service with:
 brew services stop postgresql
@@ -26,8 +25,7 @@ brew services stop postgresql
 heroku pg:psql
 
 // Now you can run commands e.g. test_table commands
-create table test_table (id integer, name text);
-insert into test_table values (1, 'hello database');
+...
 
 //Exit with:
 quit
