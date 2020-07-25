@@ -1,2 +1,0 @@
-create table test_table (id integer, name text);
-insert into test_table values (1, 'hello database');

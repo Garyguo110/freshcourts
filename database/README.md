@@ -1,5 +1,6 @@
 # PostgreSQL Database
 This is the database backing our servers.
+This directory will store SQL files which define tables and configurations for initialization.
 
 ### Install postgresql:
 ```
