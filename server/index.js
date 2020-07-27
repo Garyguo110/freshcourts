@@ -10,9 +10,8 @@ app.use(express.static(path.join(__dirname, '..', 'client/build')));
 
 app.get('/api', async (req, res) => {
     let date = dateFormat(new Date(), "mm/dd/yyyy");
-    console.log("Testing spotery scraper");
-    console.log(date);
-    res.send(await spoteryEngine.getReservationsForDate(date));
+    // TODO: Upsert sessions to the database
+    res.send(await spoteryEngine.getSessionsForDate(date));
 });
 
 app.get('/db', async (req, res) => {
