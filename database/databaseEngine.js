@@ -6,17 +6,14 @@ const pool = new Pool({
     connectionString: dbUrl,
 });
 
-async function testDatabase(res) {
+async function databaseConnection(res) {
     try {
         const client = await pool.connect();
-        const result = await client.query('SELECT * FROM test_table');
-        const results = { 'results': (result) ? result.rows : null};
-        res.send(results);
-        client.release();
+        return client;
     } catch (err) {
         console.error(err);
         res.send("Error " + err);
     }
 }
 
-exports.testDatabase = testDatabase;
+exports.databaseConnection = databaseConnection;
