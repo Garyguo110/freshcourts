@@ -12,6 +12,11 @@ brew install yarn
 brew install node
 ```
 
+### Install all dependencies
+```
+yarn install
+```
+
 ### Run a local Node.js instance:
 ```
 yarn start
