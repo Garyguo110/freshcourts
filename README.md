@@ -22,3 +22,8 @@ yarn start
 yarn add {package}
 // For example: yarn add express
 ```
+
+### Run the linter to autoformat code:
+```
+yarn format
+```
