@@ -12,6 +12,11 @@ brew install yarn
 brew install node
 ```
 
+### Install all dependencies
+```
+yarn install
+```
+
 ### Run a local Node.js instance:
 ```
 yarn start
@@ -21,4 +26,9 @@ yarn start
 ```
 yarn add {package}
 // For example: yarn add express
+```
+
+### Run the linter to autoformat code:
+```
+yarn format
 ```

@@ -6,17 +6,24 @@
   "license": "MIT",
   "scripts": {
     "start": "node server/index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "format": "prettier-eslint --write $PWD/'src/**/*.js?(x)' && eslint --fix ."
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
     "chromedriver": "^84.0.1",
     "crypto": "^1.0.1",
     "dateformat": "^3.0.3",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-strongloop": "^2.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "pg": "^8.3.0",
-    "selenium-webdriver": "^4.0.0-alpha.7",
-    "sqlite": "^4.0.12"
+    "prettier": "^2.0.5",
+    "prettier-eslint-cli": "^5.0.0",
+    "react": "^16.13.1",
+    "selenium-webdriver": "^4.0.0-alpha.7"
   }
 }
