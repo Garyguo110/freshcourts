@@ -36,7 +36,16 @@ async function getUser(user_id) {
     (err, res) => {
       if (err) throw err;
       console.log('Retrieved user successfully!');
-      return res['rows'];
+      let query_result = res['rows'][0];
+      let user = UserData.init(
+        query_result.first_name,
+        query_result.last_name,
+        query_result.username,
+        query_result.password,
+        query_result.email,
+        query_result.user_location
+      );
+      return user;
     }
   );
 }
@@ -49,6 +58,7 @@ async function getAllUsers(user_id) {
     let query_result = rows['rows'];
     var users = [];
     Object.keys(query_result).forEach(function (key) {
+      console.log(query_result[key].user_id);
       let user = UserData.init(
         query_result[key].first_name,
         query_result[key].last_name,
@@ -59,6 +69,7 @@ async function getAllUsers(user_id) {
       );
       users.push(user);
     });
+    console.log(users);
     return users;
   });
 }
@@ -81,6 +92,13 @@ async function getUserFavourite(user_id) {
     (err, res) => {
       if (err) throw err;
       console.log('User favourite retrieved succesfully!');
+      let query_result = res['rows'];
+      var favourite_courts = [];
+      Object.keys(query_result).forEach(async function (key) {
+        const court = await getCourt(query_result[key].court_id);
+        favourite_courts.push(court);
+      });
+      return favourite_courts;
     }
   );
 }
@@ -124,7 +142,14 @@ async function getCourt(court_id) {
     (err, res) => {
       if (err) throw err;
       console.log('Retrieved court successfully!');
-      return res['rows'];
+      let query_result = res['rows'][0];
+      let court = CourtData.init(
+        query_result.court_id,
+        query_result.court_name,
+        query_result.court_location,
+        query_result.hours_of_operation
+      );
+      return court;
     }
   );
 }
@@ -156,6 +181,7 @@ async function listAllCourts() {
       );
       courts.push(court);
     });
+    console.log(courts);
     return courts;
   });
 }
@@ -185,8 +211,17 @@ async function getSession(session_id) {
     (err, res) => {
       if (err) throw err;
       console.log('Retrieved session successfully!');
-      console.log(res['rows']);
-      return res['rows'];
+      let query_result = res['rows'];
+      Object.keys(query_result).forEach(async function (key) {
+        let court = await getCourt(query_result[key].court_id);
+        let session = SessionData.init(
+          court,
+          query_result[key].session_date,
+          query_result[key].time_slot,
+          query_result[key].session_availability
+        );
+        return session;
+      });
     }
   );
 }
