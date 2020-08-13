@@ -14,6 +14,11 @@ app.get('/api', async (req, res) => {
   res.send(await spoteryEngine.getSessionsForDate(date));
 });
 
+app.get('/courts', async (req, res) => {
+  let date = dateFormat(new Date(), 'mm/dd/yyyy');
+  res.send(await spoteryEngine.updateCourtsForDate(date));
+});
+
 app.get('/db', async (req, res) => {
   databaseEngine.testDatabase(res);
 });

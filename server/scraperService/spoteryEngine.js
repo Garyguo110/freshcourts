@@ -6,11 +6,10 @@ const SessionData = require('../../database/SessionData.js');
 require('chromedriver');
 
 async function getSessionsForDate(dateString) {
-  let driver = _buildDriver();
-  await driver.get(_getSearchPageUrl(dateString));
-  await _waitCourtForLength(driver, 24);
-  let courtDivList = await _getCourtDivList(driver);
+  console.log(`Get sessions for ${dateString}`);
+  let courtDivList = await _getAndWaitForCourtsList(dateString);
   let allSessions = [];
+  console.log('Parsing court list for sessions');
   await _asyncForEach(courtDivList, async (courtDiv) => {
     let courtSessions = await _parseCourtAndSessionsFromDiv(
       courtDiv,
@@ -21,7 +20,19 @@ async function getSessionsForDate(dateString) {
   return allSessions;
 }
 
-async function _parseCourtAndSessionsFromDiv(courtDiv, dateString) {
+async function updateCourtsForDate(dateString) {
+  console.log(`Get courts for ${dateString}`);
+  let courtDivList = await _getAndWaitForCourtsList(dateString);
+  let allCourts = [];
+  console.log('Parsing court list for courts');
+  await _asyncForEach(courtDivList, async (courtDiv) => {
+    let court = await _parseCourtsFromDiv(courtDiv);
+    allCourts = allCourts.concat(court);
+  });
+  return allCourts;
+}
+
+async function _parseCourtsFromDiv(courtDiv) {
   let courtLink = await courtDiv.findElement(
     By.xpath('.//a[contains(@href,"spot")]')
   );
@@ -29,7 +40,16 @@ async function _parseCourtAndSessionsFromDiv(courtDiv, dateString) {
   let courtName = await courtLink
     .findElement(By.xpath('./span'))
     .getAttribute('textContent');
-  let court = CourtData.init(courtId, courtName, '', '');
+  let courtLocation = await courtDiv
+    .findElements(By.xpath('.//descendant::span[2]'))
+    .getAttribute('textContent');
+  console.log(`Court object parsed: ${courtId} ${courtName} ${courtLocation}`);
+  let court = CourtData.init(courtId, courtName, courtLocation);
+  return court;
+}
+
+async function _parseCourtAndSessionsFromDiv(courtDiv, dateString) {
+  let court = await _parseCourtsFromDiv(courtDiv);
   return _parseSessionDivList(court, courtDiv, dateString);
 }
 
@@ -59,9 +79,40 @@ async function _parseSessionsFromDiv(court, sessionDiv, dateString) {
   return SessionData.init(court, dateString, timeSlot, isAvailable);
 }
 
+async function _getAndWaitForCourtsList(dateString) {
+  let driver = _buildDriver();
+  let url = _getSearchPageUrl(dateString);
+  console.log(`Waiting for url: ${url}`);
+  await driver.get(url);
+  console.log(await driver.getPageSource());
+  console.log('wait 2 seconds.');
+  wait(4020);
+  let captchaButton = await driver.findElement(By.className('btn-primary'));
+  console.log(await captchaButton.getAttribute('innerHTML'));
+  await captchaButton.click();
+  console.log('clicked');
+  console.log('wait 2 seconds.');
+  wait(2000);
+  console.log('new page?');
+  console.log(await driver.getPageSource());
+  await _waitCourtForLength(driver, 24);
+  console.log('Web response completed');
+  let courtDivList = await _getCourtDivList(driver);
+  return courtDivList;
+}
+
+function wait(ms){
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+ }
+}
+
 function _waitCourtForLength(driver, length) {
   return driver.wait(async () => {
     const found = await _getCourtDivList(driver);
+    console.log(found.getAttribute('outerHTML'));
     return found.length === length;
   }, 20000);
 }
@@ -104,3 +155,4 @@ async function _asyncForEach(array, callback) {
 }
 
 exports.getSessionsForDate = getSessionsForDate;
+exports.updateCourtsForDate = updateCourtsForDate;
