@@ -11,8 +11,15 @@ CREATE TABLE user_accounts (
 CREATE TABLE tennis_courts (
 	court_id INT PRIMARY KEY,
     court_name VARCHAR ( 60 ) NOT NULL,
-    court_location VARCHAR ( 60 ) NOT NULL,
-	hours_of_operation int[][] NOT NULL
+    court_location VARCHAR ( 60 ) NOT NULL
+);
+
+CREATE TABLE tennis_court_hours (
+    court_id INT REFERENCES tennis_courts (court_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    day_of_the_week VARCHAR ( 60 ) NOT NULL,
+    open_at TIME NOT NULL,
+    close_at TIME NOT NULL,
+    PRIMARY KEY (court_id, day_of_the_week, open_at)
 );
 
 CREATE TABLE user_favourite_courts (

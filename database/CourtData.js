@@ -1,12 +1,11 @@
 class CourtData {
-  constructor(id, name, location, hours) {
+  constructor(id, name, location) {
     this.id = id;
     this.name = name;
     this.location = location;
-    this.hours = hours;
   }
 }
 
-exports.init = function (id, name, location, hours) {
-  return new CourtData(id, name, location, hours);
+exports.init = function (id, name, location) {
+  return new CourtData(id, name, location);
 };
