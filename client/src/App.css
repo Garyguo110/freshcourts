@@ -1,38 +1,107 @@
-.App {
-  text-align: center;
+.grid{
+  display: grid;
+  grid-template-columns: [xl-start] 1fr [md-start] minmax(0,850px) [md-end] 1fr [xl-end];
 }
 
-.App-logo {
-  height: 40vmin;
+.grid * { grid-column: md; }
+.grid-xl { grid-column: xl; }
+
+.center {
+  text-align: center;
+  align-items: center;
+}
+
+.noHover{
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.is-vertical-center {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.relative {
+  position: relative
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.right {
+  position: absolute;
+  right: 20px;
+}
+
+.left {
+  position: absolute;
+  left: 10px;
+}
+
+.background {
+  background-color: #2F303A;
+}
+
+.green {
+  background-color: #557769;
+  border-color: #557769;
+}
+
+.light-green {
+  background-color: #8DC382;
+}
+
+.white {
+  background: #FFFFFF;
+}
+
+.datetimepicker-dummy .datetimepicker-dummy-wrapper {
+  border: #FFFFFF;
+  background: #FFFFFF;
+  border-radius: 5px;
+}
+
+.datetimepicker-dummy.is-primary::before, .datetimepicker-dummy.is-primary:before {
+  background-color: #557769 !important;
+}
+
+.datetimepicker-dummy.is-primary .datetimepicker-clear-button {
+  color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-nav {
+  background: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range .date-item {
+  background-color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range {
+  background: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range.datepicker-range-end .date-item, .datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range.datepicker-range-start .date-item {
+  background: #fff;
+  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date .date-item.is-active {
+  background: #557769 !important;
+  border-color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date .date-item.is-today {
+  border-color: #557769 !important;
+  color: #557769 !important;
+}
+
+.input-range__track {
+  background: #000000 !important;
+}
+
+.input-range__track--active {
+  background: #FFFFFF !important;
+}
+
+.input-range__slider {
+  background: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
 }
