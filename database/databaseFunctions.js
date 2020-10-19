@@ -226,6 +226,29 @@ async function getSession(session_id) {
   );
 }
 
+async function allAvailableSessions() {
+  const con = await dbEngine.databaseConnection();
+  con.query(
+    `SELECT * FROM tennis_court_sessions WHERE session_availability='available'`,
+    (err, rows) => {
+      if (err) throw err;
+      console.log(`Listed all sessions successfully!`);
+      let query_result = rows['rows'];
+      var sessions = [];
+      Object.keys(query_result).forEach(function (key) {
+        let session = SessionData.init(
+          getCourt(query_result[key].court_id),
+          query_result[key].session_date,
+          query_result[key].time_slot,
+          query_result[key].session_availability
+        );
+        sessions.push(session);
+      });
+      return sessions;
+    }
+  );
+}
+
 async function deleteSession(session_id) {
   const con = await dbEngine.databaseConnection();
   con.query(
