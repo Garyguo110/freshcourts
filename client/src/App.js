@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+// import { SessionProvider } from "./FreshContext";
 import "./App.css";
 import Header from "./components/header/header";
 import Filters from "./components/filters/filters";
+import AllCourts from "./components/courts/allCourts";
 import {addDays} from 'date-fns';
 
 class App extends Component {
@@ -40,6 +42,7 @@ class App extends Component {
       <div className="background">
         <Header />
         <Filters timeRangeCallback={this.timeRangeCallback} dateRangeCallback={this.dateRangeCallback} searchCallback={this.searchCallback}/>
+        <AllCourts timeRange={this.state.timeRange} dateRange={this.state.dateRange} search={this.state.search}/>
       </div>
      );
   }
