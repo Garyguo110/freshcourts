@@ -121,13 +121,11 @@ async function addCourt(court) {
       court_id,
       court_name,
       court_location,
-      hours_of_operation
     ) 
     VALUES (
       '${court.id}',
       '${court.name}',
-      '${court.location}', 
-      '${court.hours}')`,
+      '${court.location}'`,
     (err, res) => {
       if (err) throw err;
       console.log('Court added successfully!');
@@ -146,8 +144,7 @@ async function getCourt(court_id) {
       let court = CourtData.init(
         query_result.court_id,
         query_result.court_name,
-        query_result.court_location,
-        query_result.hours_of_operation
+        query_result.court_location
       );
       return court;
     }
@@ -167,23 +164,17 @@ async function deleteCourt(court_id) {
 
 async function listAllCourts() {
   const con = await dbEngine.databaseConnection();
-  await con.query('SELECT * FROM tennis_courts', (err, rows) => {
-    if (err) throw err;
-    console.log('Listed all courts successfully!');
-    let query_result = rows['rows'];
-    var courts = [];
-    Object.keys(query_result).forEach(function (key) {
-      let court = CourtData.init(
-        query_result[key].court_id,
-        query_result[key].court_name,
-        query_result[key].court_location,
-        query_result[key].hours_of_operation
-      );
-      courts.push(court);
-    });
-    console.log(courts);
-    return courts;
+  let courts = [];
+  const result = await con.query({
+    rowMode: 'array',
+    text: 'SELECT * FROM tennis_courts;',
   });
+  console.log('Listed all courts successfully!');
+  result.rows.forEach(function (row) {
+    courts.push(CourtData.init(...row));
+  });
+  console.log(courts);
+  return courts;
 }
 
 async function addSession(session) {

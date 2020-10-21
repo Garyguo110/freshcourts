@@ -4,6 +4,14 @@ class CourtData {
     this.name = name;
     this.location = location;
   }
+
+  toDict() {
+    return {
+      id: this.id,
+      name: this.name,
+      location: this.location,
+    };
+  }
 }
 
 exports.init = function (id, name, location) {
