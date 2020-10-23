@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 // import { SessionProvider } from "./FreshContext";
 import "./App.css";
-import Header from "./components/header/header";
-import Filters from "./components/filters/filters";
-import AllCourts from "./components/courts/allCourts";
-import {addDays} from 'date-fns';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
 import MainPage from './pages/index';
-import Signup from './pages/Signup';
+import Signup from './pages/signup';
+import HotCourtSelection from './pages/hotCourtSelection';
 
 class App extends Component {
   render() { 
@@ -15,6 +12,7 @@ class App extends Component {
       <Router>
         <Route exact path="/" component={MainPage} />
         <Route exact path="/signup" component={Signup} />
+        <Route exact path="/hotCourtSelection" component={HotCourtSelection} />
       </Router>
      );
   }

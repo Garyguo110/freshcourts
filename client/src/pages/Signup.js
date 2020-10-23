@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Header from "../components/header/header";
+import { Link } from 'react-router-dom';
 import '../App.css';
 
 const emailRegex = RegExp(
@@ -136,7 +136,9 @@ class Signup extends Component {
                         )}
                     </div>
                     <div className="createAccount">
-                        <button className="button subtitle is-rounded is-5 mb-1 has-text-white has-text-weight-medium">Continue</button>
+                        <Link to="/hotCourtSelection">
+                            <button className="button subtitle is-rounded is-5 mb-1 has-text-white has-text-weight-medium">Continue</button>
+                        </Link>
                         <button className="button has-text-white mt-0 is-text">Already Have an Account?</button>
                     </div>
                 </form>

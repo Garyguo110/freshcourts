@@ -149,13 +149,10 @@ input::placeholder {
   color: #fff;
   border: 2px solid #fff;
   border-radius: 20px;
-  width: 50%;
+  width: 100%;
   margin-top: 1em;
   padding: 8px 0px;
-  font-size: 1em;
-  font-weight: lighter;
   letter-spacing: 1px;
-  margin-bottom: 0.25em;
 }
 
 .createAccount button:hover {
