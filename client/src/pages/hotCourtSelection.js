@@ -45,8 +45,24 @@ class hotCourtSelection extends Component {
                 "name": "Balboa Park Tennis Court #4",
                 "location": "Ocean Ave & San Jose Ave, San Francisco, CA"
             }
-        ]
-     }
+        ],
+        selectedCourts : []
+    }
+
+    courtSelectCallback = (selectedCourt) => {
+        this.setState(state => {
+            const selectedCourts = [...state.selectedCourts, selectedCourt];
+            console.log(selectedCourts)
+            return {
+                selectedCourts,
+                value: '',
+            };
+        });
+    };
+
+    handleClick = () => {
+        // sent to database
+    }
     
     render() { 
         return ( 
@@ -55,14 +71,16 @@ class hotCourtSelection extends Component {
             <div className="form-wrapper">
                 {this.state.courts.map((court)=>
                     <div key={court.id}>
-                        <CourtSelection courtName={court.name} courtLocation={court.location}/>
+                        <CourtSelection courtName={court.name} courtLocation={court.location} courtSelectCallback={this.courtSelectCallback}/>
                     </div>
                 )}
-                <div className="createAccount width-thirty">
-                    <Link to="/">
-                        <button className="button subtitle is-rounded is-5 mb-1 has-text-white has-text-weight-medium">Continue</button>
-                    </Link>
-                </div>
+                {this.state.selectedCourts.length > 0 && (
+                    <div className="createAccount width-thirty">
+                        <Link to="/">
+                            <button className="button subtitle is-rounded is-5 mb-1 has-text-white has-text-weight-medium" onClick={this.handleClick}>Continue</button>
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
          );

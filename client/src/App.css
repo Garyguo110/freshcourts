@@ -164,6 +164,13 @@ input::placeholder {
   font-weight: lighter;
 }
 
+.button[disabled], fieldset[disabled] .button {
+  background-color: grey;
+  border-color: #dbdbdb;
+  box-shadow: none;
+  opacity: .5;
+}
+
 .datetimepicker-dummy .datetimepicker-dummy-wrapper {
   border: #FFFFFF;
   background: #FFFFFF;
