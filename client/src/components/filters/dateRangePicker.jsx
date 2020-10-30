@@ -16,19 +16,19 @@ function DateInput(prop) {
       });
     });
 
-    // To access to bulmaCalendar instance of an element
-    // eslint-disable-next-line no-undef
     const element = document.querySelector('#dateRange');
     if (element) {
-      // bulmaCalendar instance is available as element.bulmaCalendar
       element.bulmaCalendar.on('select', (datepicker) => {
         prop.dateRangeCallback(datepicker.data.value());
       });
     }
   }, []);
 
-    const minDate = new Date()
-    const maxDate = addDays(new Date(), 7)
+  // minDate is the minimum available date on the DateRangePicker and its value is always the current date
+  const minDate = new Date()
+  // maxDate is the maximum available date on the DateRangePicker and its value is always 7 days (a week) from the current date
+  const maxDate = addDays(new Date(), 7)
+
   return (
     <div className="column is-one-third">
       <input className="green" id="dateRange" type="date" data-is-range="true" data-show-header="false" data-min-date={minDate} data-max-date={maxDate} data-start-date={minDate} data-end-date={maxDate}/>
