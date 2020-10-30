@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import "./App.css";
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 import MainPage from './pages/index';
-import Signup from './pages/signup';
+import Signup from './pages/Signup';
 import HotCourtSelection from './pages/hotCourtSelection';
 
 class App extends Component {

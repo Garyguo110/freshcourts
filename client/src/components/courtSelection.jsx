@@ -8,7 +8,7 @@ class courtSelection extends Component {
         this.props.courtSelectCallback(data)
     }
 
-    render() { 
+    render() {
         return (
             <div className="box columns relative my-2 py-3">
                 <div className="column is-two-thirds">
