@@ -9,7 +9,7 @@ class AllCourts extends Component {
   render() {
     return (
       <section className="grid my-4">
-        {Object.entries(convertSessionData(this.state.rawSessions)).map(
+        {Object.entries(convertSessionData()).map(
           ([key, value]) => (
             <div key={key}>
               <div className="column green box is-desktop is-centered my-2">
