@@ -6,7 +6,6 @@ class TimeRange extends Component{
         super(props);
         this.featureRef = React.createRef();
         this.timeChangeHandler = this.timeChangeHandler.bind(this);
-        this.changeCompleteHandler = this.changeCompleteHandler.bind(this);
         this.state = {
             // the "start" and "end" variables are referring to the start time and end time for the timeRange filter
             value: {
@@ -51,11 +50,9 @@ class TimeRange extends Component{
         return finalTime
     }
     
-    changeCompleteHandler(time){
-        console.log("Complete Handler Called", time);
-    }
-    
     render() {
+        var startTime = "7:00"
+        var endTime = "22:00"
         return(<div className="column is-one-thid">
             <div className="time-range center">
 				<b className="has-text-white">{this.formatTime(this.state.value.start)} - {this.formatTime(this.state.value.end)}</b>
@@ -63,11 +60,10 @@ class TimeRange extends Component{
             <TimeRangeSlider
                 disabled={false}
                 format={24}
-                maxValue={"22:00"}
-                minValue={"7:00"}
+                maxValue={endTime}
+                minValue={startTime}
                 name={"time_range"}
                 onChangeStart={this.changeStartHandler}
-                onChangeComplete={this.changeCompleteHandler}
                 onChange={this.timeChangeHandler}
                 step={15}
                 value={this.state.value}/>
