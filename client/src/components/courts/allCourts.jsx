@@ -9,6 +9,7 @@ class AllCourts extends Component {
   render() {
     return (
       <section className="grid my-4">
+        {/* Grabbing sessionData from convertSessionData*/}
         {Object.entries(convertSessionData()).map(
           ([key, value]) => (
             <div key={key}>
