@@ -33,12 +33,13 @@ class TimeRange extends Component{
         var finalTime = ''
 
         // converting 24-hour time format to 12-hour time format (along with "AM" and "PM")
-        // the "if" block for time value that spills over 12-hour format (e.g. "20:00")
+        // the "if" block is for time value that spills over 12-hour format (e.g. "13:00")
         if (hourTime > twelveHourClock) {
             hourTime -= twelveHourClock;
             finalTime = '' + hourTime + minuteTime + 'PM';
         }
-        // the "else" block addresses time values ("0")
+        // the "else" block addresses time values within the 12-hour format but converts 
+        // "12:00" into PM and all times before into AM (e.g. "9:00" --> "9:00 AM")
         else {
             if (hourTime === twelveHourClock) {
                 finalTime = '' + hourTime + minuteTime + 'PM';
