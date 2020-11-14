@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SingleCourt from './singleCourt';
-import {convertSessionData} from '../../utils.js'
+import {convertSessionData} from '../../utils/data/sessionDataReformat.js'
 
 class AllCourts extends Component {
   state = {
