@@ -45,12 +45,13 @@ async function getUser(user_id) {
         query_result.email,
         query_result.user_location
       );
+      console.log(user)
       return user;
     }
   );
 }
 
-async function getAllUsers(user_id) {
+async function getAllUsers() {
   const con = await dbEngine.databaseConnection();
   await con.query('SELECT * FROM user_accounts', (err, rows) => {
     if (err) throw err;
@@ -165,7 +166,7 @@ async function deleteCourt(court_id) {
   );
 }
 
-async function listAllCourts() {
+async function getAllCourts() {
   const con = await dbEngine.databaseConnection();
   await con.query('SELECT * FROM tennis_courts', (err, rows) => {
     if (err) throw err;
@@ -311,8 +312,8 @@ module.exports = {
   deleteCourt: function (court_id) {
     return deleteCourt(court_id);
   },
-  listAllCourts: function () {
-    return listAllCourts();
+  getAllCourts: function () {
+    return getAllCourts();
   },
   addSession: function (session) {
     return addSession(session);
