@@ -2,6 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const CourtData = require('../../database/CourtData.js');
 const SessionData = require('../../database/SessionData.js');
+const DatabaseFunctions = require('../../database/databaseFunctions.js');
 
 require('chromedriver');
 
@@ -30,6 +31,7 @@ async function _parseCourtAndSessionsFromDiv(courtDiv, dateString) {
     .findElement(By.xpath('./span'))
     .getAttribute('textContent');
   let court = CourtData.init(courtId, courtName, '', '');
+  await DatabaseFunctions.addCourt(court);
   return _parseSessionDivList(court, courtDiv, dateString);
 }
 
@@ -41,6 +43,7 @@ async function _parseSessionDivList(court, courtDiv, dateString) {
     );
     await _asyncForEach(sessionDivList, async (sessionDiv) => {
       let session = await _parseSessionsFromDiv(court, sessionDiv, dateString);
+      await DatabaseFunctions.addSession(session);
       courtSessions.push(session);
     });
   } catch (e) {
