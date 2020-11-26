@@ -3,7 +3,7 @@ const UserData = require('./UserData.js');
 const CourtData = require('./CourtData.js');
 const SessionData = require('./SessionData.js');
 
-async function addUser(user) {
+async function createUser(user) {
   const con = await dbEngine.databaseConnection();
   await con.query(
     `INSERT INTO user_accounts (
@@ -51,7 +51,7 @@ async function getUser(user_id) {
   );
 }
 
-async function getAllUsers() {
+async function listUsers() {
   const con = await dbEngine.databaseConnection();
   await con.query('SELECT * FROM user_accounts', (err, rows) => {
     if (err) throw err;
@@ -70,12 +70,22 @@ async function getAllUsers() {
       );
       users.push(user);
     });
-    console.log(users);
     return users;
   });
 }
 
-async function addUserFavourite(user_id, court_id) {
+async function deleteUser(user_id) {
+  const con = await dbEngine.databaseConnection();
+  await con.query(
+    `DELETE FROM user_accounts WHERE user_id='${user_id}'`,
+    (err, res) => {
+      if (err) throw err;
+      console.log('User deleted successfully!');
+    }
+  );
+}
+
+async function createHotlist(user_id, court_id) {
   const con = await dbEngine.databaseConnection();
   await con.query(
     `INSERT INTO user_favourite_courts VALUES ('${user_id}','${court_id}')`,
@@ -86,7 +96,7 @@ async function addUserFavourite(user_id, court_id) {
   );
 }
 
-async function getUserFavourite(user_id) {
+async function readHotlist(user_id) {
   const con = await dbEngine.databaseConnection();
   await con.query(
     `SELECT * FROM user_favourite_courts WHERE user_id='${user_id}'`,
@@ -104,29 +114,18 @@ async function getUserFavourite(user_id) {
   );
 }
 
-async function deleteUser(user_id) {
-  const con = await dbEngine.databaseConnection();
-  await con.query(
-    `DELETE FROM user_accounts WHERE user_id='${user_id}'`,
-    (err, res) => {
-      if (err) throw err;
-      console.log('User deleted successfully!');
-    }
-  );
-}
-
-async function addCourt(court) {
+async function createCourt(court) {
   const con = await dbEngine.databaseConnection();
   await con.query(
     `INSERT INTO tennis_courts (
       court_id,
       court_name,
-      court_location,
-    ) 
+      court_location
+    )
     VALUES (
       '${court.id}',
       '${court.name}',
-      '${court.location}'`,
+      '${court.location}')`,
     (err, res) => {
       if (err) throw err;
       console.log('Court added successfully!');
@@ -136,20 +135,15 @@ async function addCourt(court) {
 
 async function getCourt(court_id) {
   const con = await dbEngine.databaseConnection();
-  await con.query(
-    `SELECT * FROM tennis_courts WHERE court_id='${court_id}'`,
-    (err, res) => {
-      if (err) throw err;
-      console.log('Retrieved court successfully!');
-      let query_result = res['rows'][0];
-      let court = CourtData.init(
-        query_result.court_id,
-        query_result.court_name,
-        query_result.court_location
-      );
-      return court;
-    }
+  const result = await con.query(
+    `SELECT * FROM tennis_courts WHERE court_id='${court_id}'`);
+  let query_result = result['rows'][0];
+  let court = CourtData.init(
+    query_result.court_id,
+    query_result.court_name,
+    query_result.court_location
   );
+  return court;
 }
 
 async function deleteCourt(court_id) {
@@ -163,22 +157,21 @@ async function deleteCourt(court_id) {
   );
 }
 
-async function getAllCourts() {
+async function listCourts() {
   const con = await dbEngine.databaseConnection();
   let courts = [];
   const result = await con.query({
     rowMode: 'array',
     text: 'SELECT * FROM tennis_courts;',
   });
-  console.log('Listed all courts successfully!');
   result.rows.forEach(function (row) {
     courts.push(CourtData.init(...row));
   });
-  console.log(courts);
+  console.log('Listed all courts successfully!');
   return courts;
 }
 
-async function addSession(session) {
+async function createSession(session) {
   const con = await dbEngine.databaseConnection();
   await con.query(
     `INSERT INTO tennis_court_sessions 
@@ -198,7 +191,7 @@ async function addSession(session) {
 
 async function getSession(session_id) {
   const con = await dbEngine.databaseConnection();
-  await con.query(
+  con.query(
     `SELECT * FROM tennis_court_sessions WHERE session_id='${session_id}'`,
     (err, res) => {
       if (err) throw err;
@@ -218,27 +211,26 @@ async function getSession(session_id) {
   );
 }
 
-async function allAvailableSessions() {
+async function listSessions() {
   const con = await dbEngine.databaseConnection();
-  con.query(
-    `SELECT * FROM tennis_court_sessions WHERE session_availability='available'`,
-    (err, rows) => {
-      if (err) throw err;
-      console.log(`Listed all sessions successfully!`);
-      let query_result = rows['rows'];
-      var sessions = [];
-      Object.keys(query_result).forEach(function (key) {
-        let session = SessionData.init(
-          getCourt(query_result[key].court_id),
-          query_result[key].session_date,
-          query_result[key].time_slot,
-          query_result[key].session_availability
-        );
-        sessions.push(session);
-      });
-      return sessions;
+  const rows = await con.query(
+    `SELECT * FROM tennis_court_sessions WHERE session_availability='available'`);
+  let query_result = rows['rows'];
+  var sessions = [];
+  for (var key in query_result) {
+    if (key == 9) {
+      continue;
     }
-  );
+    var court = await getCourt(query_result[key].court_id);
+    let session = SessionData.init(
+      court,
+      query_result[key].session_date,
+      query_result[key].time_slot,
+      query_result[key].session_availability
+    );
+    sessions.push(session);
+  };
+  return sessions;
 }
 
 async function deleteSession(session_id) {
@@ -252,7 +244,7 @@ async function deleteSession(session_id) {
   );
 }
 
-async function allSessionsForCourt(court) {
+async function listSessionsForCourt(court) {
   const con = await dbEngine.databaseConnection();
   con.query(
     `SELECT * FROM tennis_court_sessions WHERE court_id='${court.id}'`,
@@ -276,26 +268,26 @@ async function allSessionsForCourt(court) {
 }
 
 module.exports = {
-  addUser: function (user) {
-    return addUser(user);
+  createUser: function (user) {
+    return createUser(user);
   },
   getUser: function (user_id) {
     return getUser(user_id);
   },
-  getAllUsers: function () {
-    return getAllUsers();
+  listUsers: function () {
+    return listUsers();
   },
-  addUserFavourite: function (user_id, court_id) {
-    return addUserFavourite(user_id, court_id);
+  createHotlist: function (user_id, court_id) {
+    return createHotlist(user_id, court_id);
   },
-  getUserFavourite: function (user_id) {
-    return getUserFavourite(user_id);
+  readHotlist: function (user_id) {
+    return readHotlist(user_id);
   },
   deleteUser: function (user_id) {
     return deleteUser(user_id);
   },
-  addCourt: function (court) {
-    return addCourt(court);
+  createCourt: function (court) {
+    return createCourt(court);
   },
   getCourt: function (court_id) {
     return getCourt(court_id);
@@ -303,19 +295,22 @@ module.exports = {
   deleteCourt: function (court_id) {
     return deleteCourt(court_id);
   },
-  getAllCourts: function () {
-    return getAllCourts();
+  listCourts: function () {
+    return listCourts();
   },
-  addSession: function (session) {
-    return addSession(session);
+  createSession: function (session) {
+    return createSession(session);
   },
   getSession: function (session_id) {
     return getSession(session_id);
   },
+  listSessions: function () {
+    return listSessions();
+  },
   deleteSession: function (session_id) {
     return deleteSession(session_id);
   },
-  allSessionsForCourt: function (court_id) {
-    return allSessionsForCourt(court_id);
+  listSessionsForCourt: function (court_id) {
+    return listSessionsForCourt(court_id);
   },
 };

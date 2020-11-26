@@ -16,14 +16,9 @@ class TimeSlots extends Component {
     }
 
     verifyDate(dateRange, date) {
-        var startDate = String(dateRange.startDate).split("/");
-        var endDate = String(dateRange.endDate).split("/");
-        var currentDate = date.split("/");
-
-        startDate = new Date(startDate[2], parseInt(startDate[1])-1, startDate[0]);
-        endDate = new Date(endDate[2], parseInt(endDate[1])-1, endDate[0]);
-        currentDate = new Date(currentDate[2], parseInt(currentDate[1])-1, currentDate[0]);
-
+        const startDate = new Date(dateRange.startDate);
+        const endDate = new Date(dateRange.endDate);
+        const currentDate = new Date(date);
         return (currentDate >= startDate  && currentDate <= endDate)
     }
 
@@ -50,8 +45,6 @@ class TimeSlots extends Component {
     render() { 
         return ( 
             <div className="column">
-
-            {console.log(this.props.dateRange)}
                 {
                     Object.entries(this.props.courtSessions).map(([key, value])=>
                     (this.verifyDate(this.props.dateRange, key) &&
