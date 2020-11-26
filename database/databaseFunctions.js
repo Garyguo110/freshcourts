@@ -134,7 +134,6 @@ async function createCourt(court) {
 }
 
 async function getCourt(court_id) {
-  console.log(court_id)
   const con = await dbEngine.databaseConnection();
   const result = await con.query(
     `SELECT * FROM tennis_courts WHERE court_id='${court_id}'`);
@@ -217,7 +216,6 @@ async function listSessions() {
   const rows = await con.query(
     `SELECT * FROM tennis_court_sessions WHERE session_availability='available'`);
   let query_result = rows['rows'];
-  console.log(query_result)
   var sessions = [];
   for (var key in query_result) {
     if (key == 9) {

@@ -12,8 +12,8 @@ class MainPage extends Component {
       endTime: '22:00'
     },
     dateRange: {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7)
+      startDate: '',
+      endDate: ''
     },
     search: null
    }
