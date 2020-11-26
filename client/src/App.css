@@ -50,3 +50,58 @@
 .white {
   background: #FFFFFF;
 }
+
+.datetimepicker-dummy .datetimepicker-dummy-wrapper {
+  border: #FFFFFF;
+  background: #FFFFFF;
+  border-radius: 5px;
+}
+
+.datetimepicker-dummy.is-primary::before, .datetimepicker-dummy.is-primary:before {
+  background-color: #557769 !important;
+}
+
+.datetimepicker-dummy.is-primary .datetimepicker-clear-button {
+  color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-nav {
+  background: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range .date-item {
+  background-color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range {
+  background: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range.datepicker-range-end .date-item, .datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date.datepicker-range.datepicker-range-start .date-item {
+  background: #fff;
+  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date .date-item.is-active {
+  background: #557769 !important;
+  border-color: #557769 !important;
+}
+
+.datetimepicker.is-primary .datepicker-body .datepicker-dates .datepicker-days .datepicker-date .date-item.is-today {
+  border-color: #557769 !important;
+  color: #557769 !important;
+}
+
+.input-range__track {
+  background: #000000 !important;
+}
+
+.input-range__track--active {
+  background: #FFFFFF !important;
+}
+
+.input-range__slider {
+  background: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+}
