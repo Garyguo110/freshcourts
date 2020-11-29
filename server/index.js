@@ -82,42 +82,46 @@ app.get('/test', async (req, res) => {
   const session_23 = sessionData.init(court_3, '11/29/2020', '1:00 PM', 'available');
   const session_24 = sessionData.init(court_3, '11/29/2020', '3:00 PM', 'available');
   const session_25 = sessionData.init(court_3, '11/29/2020', '5:00 PM', 'available');
-  // await databaseFunctions.createSession(session_1);
-  // await databaseFunctions.createSession(session_2);
-  // await databaseFunctions.createSession(session_3);
-  // await databaseFunctions.createSession(session_4);
-  // await databaseFunctions.createSession(session_5);
-  // await databaseFunctions.createSession(session_6);
-  // await databaseFunctions.createSession(session_7);
-  // await databaseFunctions.createSession(session_8);
-  // await databaseFunctions.createSession(session_9);
-  // await databaseFunctions.createSession(session_10);
-  // await databaseFunctions.createSession(session_11);
-  // await databaseFunctions.createSession(session_12);
-  // await databaseFunctions.createSession(session_13);
-  // await databaseFunctions.createSession(session_14);
-  // await databaseFunctions.createSession(session_15);
-  // await databaseFunctions.createSession(session_16);
-  // await databaseFunctions.createSession(session_17);
-  // await databaseFunctions.createSession(session_18);
-  // await databaseFunctions.createSession(session_19);
-  // await databaseFunctions.createSession(session_20);
-  // await databaseFunctions.createSession(session_21);
-  // await databaseFunctions.createSession(session_22);
-  // await databaseFunctions.createSession(session_23);
-  // await databaseFunctions.createSession(session_24);
-  // await databaseFunctions.createSession(session_25);
-  const sessions = await databaseFunctions.listSessions();
+  const con = await databaseEngine.databaseConnection();
+  // await databaseFunctions.createSession(con, session_1);
+  // await databaseFunctions.createSession(con, session_2);
+  // await databaseFunctions.createSession(con, session_3);
+  // await databaseFunctions.createSession(con, session_4);
+  // await databaseFunctions.createSession(con, session_5);
+  // await databaseFunctions.createSession(con, session_6);
+  // await databaseFunctions.createSession(con, session_7);
+  // await databaseFunctions.createSession(con, session_8);
+  // await databaseFunctions.createSession(con, session_9);
+  // await databaseFunctions.createSession(con, session_10);
+  // await databaseFunctions.createSession(con, session_11);
+  // await databaseFunctions.createSession(con, session_12);
+  // await databaseFunctions.createSession(con, session_13);
+  // await databaseFunctions.createSession(con, session_14);
+  // await databaseFunctions.createSession(con, session_15);
+  // await databaseFunctions.createSession(con, session_16);
+  // await databaseFunctions.createSession(con, session_17);
+  // await databaseFunctions.createSession(con, session_18);
+  // await databaseFunctions.createSession(con, session_19);
+  // await databaseFunctions.createSession(con, session_20);
+  // await databaseFunctions.createSession(con, session_21);
+  // await databaseFunctions.createSession(con, session_22);
+  // await databaseFunctions.createSession(con, session_23);
+  // await databaseFunctions.createSession(con, session_24);
+  // await databaseFunctions.createSession(con, session_25);
+  const sessions = await databaseFunctions.listSessions(con);
   res.send(sessions);
 });
 
 app.get('/listSessions', async (req, res) => {
-  const sessions = await databaseFunctions.listSessions();
+  const con = await databaseEngine.databaseConnection();
+  const sessions = await databaseFunctions.listSessions(con);
   res.send(sessions);
 });
 
 app.get('/listHotCourts', async (req, res) => {
-  res.send(databaseFunctions.getUserFavourite(req.user_id));
+  const con = await databaseEngine.databaseConnection();
+  const hotCourts = await databaseFunctions.getUserFavourite(con, req.user_id)
+  res.send(hotCourts);
 });
 
 // CRUD
@@ -125,13 +129,14 @@ app.get('/listHotCourts', async (req, res) => {
 // app.post('/deleteHotCourts')
 
 app.post('/createHotCourts', async (req, res) => {
-  res.send(databaseFunctions.addUserFavourite(req.user_id));
+  res.send(databaseFunctions.addUserFavourite(con, req.user_id, req.courts));
 });
 
 //create sessions
 
 app.get('/listCourts', async (req, res) => {
-  const courts = await databaseFunctions.getAllCourts();
+  const con = await databaseEngine.databaseConnection();
+  const courts = await databaseFunctions.listCourts(con);
   res.send(courts);
 });
 

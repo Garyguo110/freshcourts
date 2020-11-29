@@ -3,8 +3,7 @@ const UserData = require('./UserData.js');
 const CourtData = require('./CourtData.js');
 const SessionData = require('./SessionData.js');
 
-async function createUser(user) {
-  const con = await dbEngine.databaseConnection();
+async function createUser(con, user) {
   await con.query(
     `INSERT INTO user_accounts (
       first_name,
@@ -29,8 +28,7 @@ async function createUser(user) {
   );
 }
 
-async function getUser(user_id) {
-  const con = await dbEngine.databaseConnection();
+async function getUser(con, user_id) {
   await con.query(
     `SELECT * FROM user_accounts WHERE user_id='${user_id}'`,
     (err, res) => {
@@ -51,8 +49,7 @@ async function getUser(user_id) {
   );
 }
 
-async function listUsers() {
-  const con = await dbEngine.databaseConnection();
+async function listUsers(con) {
   await con.query('SELECT * FROM user_accounts', (err, rows) => {
     if (err) throw err;
     console.log('Retrieved all users successfully!');
@@ -74,8 +71,7 @@ async function listUsers() {
   });
 }
 
-async function deleteUser(user_id) {
-  const con = await dbEngine.databaseConnection();
+async function deleteUser(con, user_id) {
   await con.query(
     `DELETE FROM user_accounts WHERE user_id='${user_id}'`,
     (err, res) => {
@@ -85,8 +81,7 @@ async function deleteUser(user_id) {
   );
 }
 
-async function createHotlist(user_id, court_id) {
-  const con = await dbEngine.databaseConnection();
+async function createHotlist(con, user_id, court_id) {
   await con.query(
     `INSERT INTO user_favourite_courts VALUES ('${user_id}','${court_id}')`,
     (err, res) => {
@@ -96,8 +91,7 @@ async function createHotlist(user_id, court_id) {
   );
 }
 
-async function readHotlist(user_id) {
-  const con = await dbEngine.databaseConnection();
+async function readHotlist(con, user_id) {
   await con.query(
     `SELECT * FROM user_favourite_courts WHERE user_id='${user_id}'`,
     (err, res) => {
@@ -106,7 +100,7 @@ async function readHotlist(user_id) {
       let query_result = res['rows'];
       var favourite_courts = [];
       Object.keys(query_result).forEach(async function (key) {
-        const court = await getCourt(query_result[key].court_id);
+        const court = await getCourt(con, query_result[key].court_id);
         favourite_courts.push(court);
       });
       return favourite_courts;
@@ -114,8 +108,7 @@ async function readHotlist(user_id) {
   );
 }
 
-async function createCourt(court) {
-  const con = await dbEngine.databaseConnection();
+async function createCourt(con, court) {
   await con.query(
     `INSERT INTO tennis_courts (
       court_id,
@@ -133,8 +126,7 @@ async function createCourt(court) {
   );
 }
 
-async function getCourt(court_id) {
-  const con = await dbEngine.databaseConnection();
+async function getCourt(con, court_id) {
   const result = await con.query(
     `SELECT * FROM tennis_courts WHERE court_id='${court_id}'`);
   let query_result = result['rows'][0];
@@ -146,8 +138,7 @@ async function getCourt(court_id) {
   return court;
 }
 
-async function deleteCourt(court_id) {
-  const con = await dbEngine.databaseConnection();
+async function deleteCourt(con, court_id) {
   await con.query(
     `DELETE FROM tennis_courts WHERE court_id='${court_id}'`,
     (err, res) => {
@@ -157,8 +148,7 @@ async function deleteCourt(court_id) {
   );
 }
 
-async function listCourts() {
-  const con = await dbEngine.databaseConnection();
+async function listCourts(con) {
   let courts = [];
   const result = await con.query({
     rowMode: 'array',
@@ -171,8 +161,7 @@ async function listCourts() {
   return courts;
 }
 
-async function createSession(session) {
-  const con = await dbEngine.databaseConnection();
+async function createSession(con, session) {
   await con.query(
     `INSERT INTO tennis_court_sessions 
     VALUES (
@@ -189,8 +178,7 @@ async function createSession(session) {
   );
 }
 
-async function getSession(session_id) {
-  const con = await dbEngine.databaseConnection();
+async function getSession(con, session_id) {
   con.query(
     `SELECT * FROM tennis_court_sessions WHERE session_id='${session_id}'`,
     (err, res) => {
@@ -198,7 +186,7 @@ async function getSession(session_id) {
       console.log('Retrieved session successfully!');
       let query_result = res['rows'];
       Object.keys(query_result).forEach(async function (key) {
-        let court = await getCourt(query_result[key].court_id);
+        let court = await getCourt(con, query_result[key].court_id);
         let session = SessionData.init(
           court,
           query_result[key].session_date,
@@ -211,8 +199,7 @@ async function getSession(session_id) {
   );
 }
 
-async function listSessions() {
-  const con = await dbEngine.databaseConnection();
+async function listSessions(con) {
   const rows = await con.query(
     `SELECT * FROM tennis_court_sessions WHERE session_availability='available'`);
   let query_result = rows['rows'];
@@ -221,7 +208,7 @@ async function listSessions() {
     if (key == 9) {
       continue;
     }
-    var court = await getCourt(query_result[key].court_id);
+    var court = await getCourt(con, query_result[key].court_id);
     let session = SessionData.init(
       court,
       query_result[key].session_date,
@@ -233,8 +220,7 @@ async function listSessions() {
   return sessions;
 }
 
-async function deleteSession(session_id) {
-  const con = await dbEngine.databaseConnection();
+async function deleteSession(con, session_id) {
   con.query(
     `DELETE FROM tennis_court_sessions WHERE session_id='${session_id}'`,
     (err, res) => {
@@ -244,8 +230,7 @@ async function deleteSession(session_id) {
   );
 }
 
-async function listSessionsForCourt(court) {
-  const con = await dbEngine.databaseConnection();
+async function listSessionsForCourt(con, court) {
   con.query(
     `SELECT * FROM tennis_court_sessions WHERE court_id='${court.id}'`,
     (err, rows) => {
@@ -268,11 +253,11 @@ async function listSessionsForCourt(court) {
 }
 
 module.exports = {
-  createUser: function (user) {
-    return createUser(user);
+  createUser: function (con, user) {
+    return createUser(con, user);
   },
-  getUser: function (user_id) {
-    return getUser(user_id);
+  getUser: function (con, user_id) {
+    return getUser(con, user_id);
   },
   listUsers: function () {
     return listUsers();
@@ -289,8 +274,8 @@ module.exports = {
   createCourt: function (court) {
     return createCourt(court);
   },
-  getCourt: function (court_id) {
-    return getCourt(court_id);
+  getCourt: function (con, court_id) {
+    return getCourt(con, court_id);
   },
   deleteCourt: function (court_id) {
     return deleteCourt(court_id);
@@ -298,14 +283,14 @@ module.exports = {
   listCourts: function () {
     return listCourts();
   },
-  createSession: function (session) {
-    return createSession(session);
+  createSession: function (con, session) {
+    return createSession(con, session);
   },
   getSession: function (session_id) {
     return getSession(session_id);
   },
-  listSessions: function () {
-    return listSessions();
+  listSessions: function (con) {
+    return listSessions(con);
   },
   deleteSession: function (session_id) {
     return deleteSession(session_id);

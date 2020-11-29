@@ -15,7 +15,7 @@ class AllCourts extends Component {
       })
     return query
   };
-  
+
   async componentDidMount() {
     const sessionsQuery = await this.getAPIresult()
     this.setState({rawSessionData: sessionsQuery})
